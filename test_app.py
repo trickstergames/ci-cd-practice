@@ -7,7 +7,7 @@ def test_home():
     response = client.get("/")
 
     assert response.status_code == 200
-    assert "CI/CD работает!" in response.data.decode("utf-8")
+    assert "CI/CD работает! версия 2" in response.data.decode("utf-8")
 
 
 def test_health():
