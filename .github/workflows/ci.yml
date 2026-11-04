@@ -1,0 +1,43 @@
+# Название пайплайна
+name: CI - Test and Build
+
+# События, при которых запускается пайплайн
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Задания пайплайна
+jobs:
+  build-and-test:
+
+    # Виртуальная машина GitHub
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Получаем код из репозитория
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      # Устанавливаем Python
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      # Устанавливаем зависимости
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      # Запускаем автоматические тесты
+      - name: Run tests
+        run: python -m pytest -q
+
+      # Собираем Docker-образ
+      - name: Build Docker image
+        run: docker build -t ci-cd-practice:latest .
